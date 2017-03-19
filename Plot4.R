@@ -13,8 +13,6 @@ data <- data.table::fread(input = "household_power_consumption.txt",
                           nrows = 2075259,
                           stringsAsFactors = FALSE, check.names=F)
 
-# handling Scientific Notation that might result at plotting
-data[, Global_active_power := lapply(.SD, as.numeric), .SDcols = c("Global_active_power")]
 
 # Making a POSIXct date capable of being filtered and graphed by time of day
 data[, dateTime := as.POSIXct(paste(Date, Time), format = "%d/%m/%Y %H:%M:%S")]
@@ -29,17 +27,18 @@ data <- data[, c(1,2,10,3,4,5,6,7,8,9)]
 par(mfrow=c(2,2))
 
 # Plot 1
-with(data, plot(Global_active_power~dateTime, type="l",
+with(data, plot(dateTime~Global_active_power, type="l",
            ylab="Global Active Power (kilowatts)", xlab="", cex = 0.2))
 
 # Plot 2
-with(data, plot(Voltage~dateTime,  type="l",
-           xlab="", ylab="Global Active Power"))
+with(data, plot(dateTime~Voltage,  type="l",
+           xlab="", ylab="Global Active Power", cex = 0.2))
 
 # Plot 3
-plot(data$dateTime , data$Sub_metering_1, type="l", xlab="", ylab="Energy sub metering")
-lines(data$dateTime, data$Sub_metering_2, col="red")
-lines(data$dateTime, data$Sub_metering_3,col="blue")
+plot(data$dateTime , data$Sub_metering_1, xlab="", ylab="Energy sub metering", cex = 0.2)
+lines(data$dateTime, data$Sub_metering_1, type= "l",col="black")
+lines(data$dateTime, data$Sub_metering_2, type= "l",col="red")
+lines(data$dateTime, data$Sub_metering_3,type= "l",col="blue")
 legend("topright", col=c("black","red","blue"), 
        c("Sub_metering_1  ","Sub_metering_2  ", "Sub_metering_3  "), 
        lty=c(1,1), bty="n", cex=.5) 
