@@ -13,8 +13,6 @@ data <- data.table::fread(input = "household_power_consumption.txt",
                           nrows = 2075259,
                           stringsAsFactors = FALSE, check.names=F)
 
-# handling Scientific Notation that might result at plotting
-data[, Global_active_power := lapply(.SD, as.numeric), .SDcols = c("Global_active_power")]
 
 # Making a POSIXct date capable of being filtered and graphed by time of day
 data[, dateTime := as.POSIXct(paste(Date, Time), format = "%d/%m/%Y %H:%M:%S")]
@@ -27,9 +25,10 @@ data <- data[, c(1,2,10,3,4,5,6,7,8,9)]
 
 
 ## Plot 3
-plot(data$Sub_metering_1~data$dateTime, type="l",
-           ylab="Global Active Power (kilowatts)", xlab="")
+plot(data$dateTime~data$Sub_metering_1, type="l",
+           ylab="Global Active Power (kilowatts)", xlab="", type = "n")
 
+ines(data$Sub_metering_1~data$dateTime,col='black')
 lines(data$Sub_metering_2~data$dateTime,col='Red')  #Annotations
 lines(data$Sub_metering_3~data$dateTime,col='Blue')
 
