@@ -52,6 +52,3 @@ plot(data$dateTime, data$Global_reactive_power, type="l",
 dev.cur()
 dev.copy(png(filename =  "plot3.png", width=480, height=480))
 dev.off()  #ShutDown the envoked Graphicdevices
-
-
-
